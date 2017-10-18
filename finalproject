@@ -1,0 +1,566 @@
+-- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
+--
+-- Host: localhost    Database: finalproject
+-- ------------------------------------------------------
+-- Server version	5.7.17-log
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `aircraft`
+--
+
+DROP TABLE IF EXISTS `aircraft`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `aircraft` (
+  `aircraft_code` varchar(4) NOT NULL,
+  `manufacturer_id` int(2) NOT NULL,
+  `model` varchar(45) NOT NULL,
+  PRIMARY KEY (`aircraft_code`),
+  KEY `aircraft_manufacture_id_idx` (`manufacturer_id`),
+  CONSTRAINT `aircraft_manufacture_id` FOREIGN KEY (`manufacturer_id`) REFERENCES `aircraft_manufacturer` (`manufacturer_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `aircraft`
+--
+
+LOCK TABLES `aircraft` WRITE;
+/*!40000 ALTER TABLE `aircraft` DISABLE KEYS */;
+INSERT INTO `aircraft` VALUES ('A388',2,'Airbus A380-800'),('B737',1,'Boeing 737-700'),('B748',1,'Boeing 747-8'),('B77W',1,'Boeing 777-300ER');
+/*!40000 ALTER TABLE `aircraft` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `aircraft_instance`
+--
+
+DROP TABLE IF EXISTS `aircraft_instance`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `aircraft_instance` (
+  `aircraft_instance_id` int(4) NOT NULL,
+  `aircraft_code` varchar(4) NOT NULL,
+  `purchase_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`aircraft_instance_id`),
+  KEY `code_idx` (`aircraft_code`),
+  CONSTRAINT `code` FOREIGN KEY (`aircraft_code`) REFERENCES `aircraft` (`aircraft_code`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `aircraft_instance`
+--
+
+LOCK TABLES `aircraft_instance` WRITE;
+/*!40000 ALTER TABLE `aircraft_instance` DISABLE KEYS */;
+INSERT INTO `aircraft_instance` VALUES (1,'A388','2008-08-05 22:19:03'),(2,'B737','2002-03-12 04:00:00'),(3,'B748','2010-12-11 05:00:00'),(4,'B77W','2010-04-15 04:00:00');
+/*!40000 ALTER TABLE `aircraft_instance` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `aircraft_manufacturer`
+--
+
+DROP TABLE IF EXISTS `aircraft_manufacturer`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `aircraft_manufacturer` (
+  `manufacturer_id` int(2) NOT NULL,
+  `manufacture_name` varchar(45) NOT NULL,
+  PRIMARY KEY (`manufacturer_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `aircraft_manufacturer`
+--
+
+LOCK TABLES `aircraft_manufacturer` WRITE;
+/*!40000 ALTER TABLE `aircraft_manufacturer` DISABLE KEYS */;
+INSERT INTO `aircraft_manufacturer` VALUES (1,'Boeing Commercial Airplanes'),(2,'Airbus');
+/*!40000 ALTER TABLE `aircraft_manufacturer` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `airport`
+--
+
+DROP TABLE IF EXISTS `airport`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `airport` (
+  `airport_code` varchar(3) NOT NULL,
+  `airport_country` varchar(3) NOT NULL,
+  `airport_location` varchar(45) NOT NULL,
+  `airport_name` varchar(45) NOT NULL,
+  PRIMARY KEY (`airport_code`),
+  KEY `country_FK_idx` (`airport_country`),
+  CONSTRAINT `country_FK` FOREIGN KEY (`airport_country`) REFERENCES `country` (`country_code`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `airport`
+--
+
+LOCK TABLES `airport` WRITE;
+/*!40000 ALTER TABLE `airport` DISABLE KEYS */;
+INSERT INTO `airport` VALUES ('HND','JPN','Tokyo, Japan','Tokyo Internationl Airport'),('LHR','GBR','London, United Kingdom','London Heathrow Airport'),('ORD','USA','Chicago, United States','Chicago O\'Hare International Airport'),('PEK','CHN','Beijing, China','Beijing Capital International Airport'),('TPE','TWN','Taipei, Taiwan','Taiwan Taoyuan International Airport');
+/*!40000 ALTER TABLE `airport` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `country`
+--
+
+DROP TABLE IF EXISTS `country`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `country` (
+  `country_code` varchar(3) NOT NULL,
+  `country_name` varchar(45) NOT NULL,
+  PRIMARY KEY (`country_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `country`
+--
+
+LOCK TABLES `country` WRITE;
+/*!40000 ALTER TABLE `country` DISABLE KEYS */;
+INSERT INTO `country` VALUES ('CHN','China'),('GBR','United Kingdom'),('JPN','Japan'),('TWN','Taiwan'),('USA','United States of America');
+/*!40000 ALTER TABLE `country` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `flight`
+--
+
+DROP TABLE IF EXISTS `flight`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `flight` (
+  `flight_code` varchar(6) NOT NULL,
+  `description` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`flight_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `flight`
+--
+
+LOCK TABLES `flight` WRITE;
+/*!40000 ALTER TABLE `flight` DISABLE KEYS */;
+INSERT INTO `flight` VALUES ('NH011',''),('NH111','');
+/*!40000 ALTER TABLE `flight` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `flight_schedule`
+--
+
+DROP TABLE IF EXISTS `flight_schedule`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `flight_schedule` (
+  `flight_schedule_id` int(11) NOT NULL,
+  `aircraft_instance` int(4) NOT NULL,
+  `code` varchar(6) NOT NULL,
+  `depart_airport` varchar(3) NOT NULL,
+  `arrival_airport` varchar(3) NOT NULL,
+  `depart_date_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `arrival_date_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `flight_status` varchar(45) NOT NULL DEFAULT 'ON TIME',
+  PRIMARY KEY (`flight_schedule_id`),
+  KEY `code_idx` (`code`),
+  KEY `instance_FK_idx` (`aircraft_instance`),
+  KEY `depart_FK_idx` (`depart_airport`),
+  KEY `arrival_FK_idx` (`arrival_airport`),
+  CONSTRAINT `arrival_FK` FOREIGN KEY (`arrival_airport`) REFERENCES `airport` (`airport_code`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `code_FK` FOREIGN KEY (`code`) REFERENCES `flight` (`flight_code`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `depart_FK` FOREIGN KEY (`depart_airport`) REFERENCES `airport` (`airport_code`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `instance_FK` FOREIGN KEY (`aircraft_instance`) REFERENCES `aircraft_instance` (`aircraft_instance_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `flight_schedule`
+--
+
+LOCK TABLES `flight_schedule` WRITE;
+/*!40000 ALTER TABLE `flight_schedule` DISABLE KEYS */;
+INSERT INTO `flight_schedule` VALUES (1,4,'NH111','ORD','HND','2017-05-03 04:01:00','2017-05-05 00:30:00','DELAY'),(2,4,'NH011','HND','ORD','2017-05-05 14:30:00','2017-05-10 23:45:00','ON TIME');
+/*!40000 ALTER TABLE `flight_schedule` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 trigger `flight_schedule_update`
+after update on `flight_schedule`
+	for each row
+begin
+	insert into flight_schedule_log(`flight_schedule_id`,`code`,`depart_airport`,`arrival_airport`,`old_depart_date_time`,`new_depart_date_time`,`old_arrival_date_time`,`new_arrival_date_time`,`old_flight_status`,`new_flight_status`)
+    values (old.flight_schedule_id, old.code, old.depart_airport, old.arrival_airport, old.depart_date_time, new.depart_date_time, old.arrival_date_time, new.arrival_date_time,old.flight_status, new.flight_status);
+end */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Table structure for table `flight_schedule_log`
+--
+
+DROP TABLE IF EXISTS `flight_schedule_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `flight_schedule_log` (
+  `flight_log_id` int(11) NOT NULL AUTO_INCREMENT,
+  `flight_schedule_id` varchar(45) DEFAULT NULL,
+  `code` varchar(6) DEFAULT NULL,
+  `depart_airport` varchar(3) DEFAULT NULL,
+  `arrival_airport` varchar(3) DEFAULT NULL,
+  `old_depart_date_time` timestamp NULL DEFAULT NULL,
+  `new_depart_date_time` timestamp NULL DEFAULT NULL,
+  `old_arrival_date_time` timestamp NULL DEFAULT NULL,
+  `new_arrival_date_time` timestamp NULL DEFAULT NULL,
+  `old_flight_status` varchar(45) DEFAULT NULL,
+  `new_flight_status` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`flight_log_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `flight_schedule_log`
+--
+
+LOCK TABLES `flight_schedule_log` WRITE;
+/*!40000 ALTER TABLE `flight_schedule_log` DISABLE KEYS */;
+INSERT INTO `flight_schedule_log` VALUES (6,'1','NH111','ORD','HND','2017-04-18 19:28:33','2017-05-03 04:00:00','2017-05-05 00:30:00','2017-05-05 00:30:00','ON TIME','ON TIME'),(7,'1','NH111','ORD','HND','2017-05-03 04:00:00','2017-05-03 04:01:00','2017-05-05 00:30:00','2017-05-05 00:30:00','ON TIME','ON TIME'),(8,'1','NH111','ORD','HND','2017-05-03 04:01:00','2017-05-03 04:01:00','2017-05-05 00:30:00','2017-05-05 00:30:00','ON TIME','DELAY');
+/*!40000 ALTER TABLE `flight_schedule_log` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `flight_schedule_seat`
+--
+
+DROP TABLE IF EXISTS `flight_schedule_seat`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `flight_schedule_seat` (
+  `flight_schedule_id` int(11) NOT NULL,
+  `seat_id` int(11) NOT NULL,
+  PRIMARY KEY (`flight_schedule_id`,`seat_id`),
+  KEY `seat_FK_idx` (`seat_id`),
+  CONSTRAINT `flight_schedule_FK` FOREIGN KEY (`flight_schedule_id`) REFERENCES `flight_schedule` (`flight_schedule_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `seat_FK` FOREIGN KEY (`seat_id`) REFERENCES `seat` (`seat_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `flight_schedule_seat`
+--
+
+LOCK TABLES `flight_schedule_seat` WRITE;
+/*!40000 ALTER TABLE `flight_schedule_seat` DISABLE KEYS */;
+INSERT INTO `flight_schedule_seat` VALUES (1,1),(1,2),(1,3),(2,4),(1,5),(2,6);
+/*!40000 ALTER TABLE `flight_schedule_seat` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `passenger`
+--
+
+DROP TABLE IF EXISTS `passenger`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `passenger` (
+  `passenger_id` int(11) NOT NULL,
+  `first_name` varchar(45) DEFAULT NULL,
+  `middle_name` varchar(45) DEFAULT NULL,
+  `last_name` varchar(45) DEFAULT NULL,
+  `phone_number` varchar(12) DEFAULT NULL,
+  `address` varchar(45) DEFAULT NULL,
+  `city` varchar(20) DEFAULT NULL,
+  `state` varchar(45) DEFAULT NULL,
+  `country` varchar(3) NOT NULL,
+  `zip` varchar(9) DEFAULT NULL,
+  PRIMARY KEY (`passenger_id`),
+  KEY `country_FK_idx` (`country`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `passenger`
+--
+
+LOCK TABLES `passenger` WRITE;
+/*!40000 ALTER TABLE `passenger` DISABLE KEYS */;
+INSERT INTO `passenger` VALUES (1,'Michael','Jeffrey','Jordon','111111111','1901 W Madison St','Chicago','Illinois','USA','60601'),(2,'Donald','John','Trump','321456987456','1600 Pennsylvania Ave NW','Washington','DC','USA','20500'),(3,'Miu','','Hirano','787878945612','4 Chome-2-8 Shibakoen','Minato','Tokyo','JPN','105-0011');
+/*!40000 ALTER TABLE `passenger` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `passenger_update`
+	AFTER UPDATE
+	ON `passenger`
+	FOR EACH ROW
+BEGIN
+	INSERT INTO passenger_log 
+    values(user(), OLD.passenger_ID, OLD.first_name, NEW.first_name, OLD.middle_name, NEW.middle_name,old.last_name,new.last_name,old.phone_number,new.phone_number,old.address,new.address,old.city,new.city,old.state,new.city,old.country,new.country,old.zip,new.zip);
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Table structure for table `passenger_log`
+--
+
+DROP TABLE IF EXISTS `passenger_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `passenger_log` (
+  `username` varchar(45) NOT NULL,
+  `passengerID` int(11) DEFAULT NULL,
+  `old_FN` varchar(45) DEFAULT NULL,
+  `new_FN` varchar(45) DEFAULT NULL,
+  `old_MN` varchar(45) DEFAULT NULL,
+  `new_MN` varchar(45) DEFAULT NULL,
+  `old_LN` varchar(45) DEFAULT NULL,
+  `new_LN` varchar(45) DEFAULT NULL,
+  `old_phone` varchar(12) DEFAULT NULL,
+  `new_phone` varchar(12) DEFAULT NULL,
+  `old_address` varchar(45) DEFAULT NULL,
+  `new_address` varchar(45) DEFAULT NULL,
+  `old_city` varchar(20) DEFAULT NULL,
+  `new_city` varchar(20) DEFAULT NULL,
+  `old_state` varchar(45) DEFAULT NULL,
+  `new_state` varchar(45) DEFAULT NULL,
+  `old_country` varchar(3) DEFAULT NULL,
+  `new_country` varchar(3) DEFAULT NULL,
+  `old_zip` varchar(9) DEFAULT NULL,
+  `new_zip` varchar(9) DEFAULT NULL,
+  PRIMARY KEY (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `passenger_log`
+--
+
+LOCK TABLES `passenger_log` WRITE;
+/*!40000 ALTER TABLE `passenger_log` DISABLE KEYS */;
+INSERT INTO `passenger_log` VALUES ('root@localhost',1,'Michael','Michael','Jeffrey','Jeffrey','Jordon','Jordon','000000000','111111111','1901 W Madison St','1901 W Madison St','Chicago','Chicago','Illinois','Chicago','USA','USA','60601','60601');
+/*!40000 ALTER TABLE `passenger_log` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `payment`
+--
+
+DROP TABLE IF EXISTS `payment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `payment` (
+  `payment_id` int(11) NOT NULL,
+  `payment_date_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `payment_amount` double NOT NULL,
+  `payment_status` varchar(45) NOT NULL DEFAULT 'Pending',
+  PRIMARY KEY (`payment_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `payment`
+--
+
+LOCK TABLES `payment` WRITE;
+/*!40000 ALTER TABLE `payment` DISABLE KEYS */;
+INSERT INTO `payment` VALUES (1,'2017-01-02 17:01:59',1500,'Pending'),(2,'2017-02-02 18:11:55',1100,'Pending'),(3,'2017-02-03 00:01:01',1500,'Pending');
+/*!40000 ALTER TABLE `payment` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `payment_reservation`
+--
+
+DROP TABLE IF EXISTS `payment_reservation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `payment_reservation` (
+  `payment_id` int(11) NOT NULL,
+  `reservation_id` int(11) NOT NULL,
+  PRIMARY KEY (`payment_id`,`reservation_id`),
+  KEY `reservation_FK_idx` (`reservation_id`),
+  CONSTRAINT `payment_FK` FOREIGN KEY (`payment_id`) REFERENCES `payment` (`payment_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `reservation_FK` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`reservation_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `payment_reservation`
+--
+
+LOCK TABLES `payment_reservation` WRITE;
+/*!40000 ALTER TABLE `payment_reservation` DISABLE KEYS */;
+INSERT INTO `payment_reservation` VALUES (3,1),(2,2),(1,3);
+/*!40000 ALTER TABLE `payment_reservation` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `reservation`
+--
+
+DROP TABLE IF EXISTS `reservation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `reservation` (
+  `reservation_id` int(11) NOT NULL,
+  `passenger_id` int(11) NOT NULL,
+  `seat_id` int(11) NOT NULL,
+  `reservation_date_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `reservation_status` varchar(45) NOT NULL DEFAULT 'Confirmed',
+  `flight_schedule` int(11) NOT NULL,
+  PRIMARY KEY (`reservation_id`,`seat_id`),
+  UNIQUE KEY `passenger_id_UNIQUE` (`passenger_id`),
+  KEY `passenger_id_idx` (`passenger_id`),
+  KEY `flight_schedule_re_FK_idx` (`flight_schedule`),
+  KEY `seat_FK_idx` (`seat_id`),
+  KEY `seat_idx` (`seat_id`),
+  CONSTRAINT `passenger_FK` FOREIGN KEY (`passenger_id`) REFERENCES `passenger` (`passenger_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `seat` FOREIGN KEY (`seat_id`) REFERENCES `seat` (`seat_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `reservation`
+--
+
+LOCK TABLES `reservation` WRITE;
+/*!40000 ALTER TABLE `reservation` DISABLE KEYS */;
+INSERT INTO `reservation` VALUES (1,1,1,'2017-01-01 05:00:00','',0),(2,2,2,'2017-02-01 05:00:00','',0),(3,3,5,'2017-02-01 05:00:00','',0);
+/*!40000 ALTER TABLE `reservation` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `reservation_flight_schedule`
+--
+
+DROP TABLE IF EXISTS `reservation_flight_schedule`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `reservation_flight_schedule` (
+  `reservation_id` int(11) NOT NULL,
+  `flight_schedule_id` int(11) NOT NULL,
+  PRIMARY KEY (`reservation_id`,`flight_schedule_id`),
+  KEY `flight_sch_FK_idx` (`flight_schedule_id`),
+  CONSTRAINT `flight_sch_FK` FOREIGN KEY (`flight_schedule_id`) REFERENCES `flight_schedule` (`flight_schedule_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `re_FK` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`reservation_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `reservation_flight_schedule`
+--
+
+LOCK TABLES `reservation_flight_schedule` WRITE;
+/*!40000 ALTER TABLE `reservation_flight_schedule` DISABLE KEYS */;
+/*!40000 ALTER TABLE `reservation_flight_schedule` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `seat`
+--
+
+DROP TABLE IF EXISTS `seat`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `seat` (
+  `seat_id` int(11) NOT NULL,
+  `travel_class` int(11) NOT NULL,
+  `seat_price` double NOT NULL,
+  `reserved_or_not` binary(1) NOT NULL DEFAULT '0',
+  `flight_schedule_id` int(11) NOT NULL,
+  PRIMARY KEY (`seat_id`),
+  KEY `class_FK_idx` (`travel_class`),
+  KEY `flight_schedule_seat_idx` (`flight_schedule_id`),
+  CONSTRAINT `class_FK` FOREIGN KEY (`travel_class`) REFERENCES `travel_class` (`travel_class_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `seat`
+--
+
+LOCK TABLES `seat` WRITE;
+/*!40000 ALTER TABLE `seat` DISABLE KEYS */;
+INSERT INTO `seat` VALUES (1,1,1500,'1',0),(2,2,1100,'0',0),(3,3,750,'\0',0),(4,3,750,'\0',0),(5,1,1500,'0',0),(6,2,1100,'\0',0),(7,3,750,'\0',0),(8,3,750,'\0',0),(9,3,750,'\0',0);
+/*!40000 ALTER TABLE `seat` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `travel_class`
+--
+
+DROP TABLE IF EXISTS `travel_class`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `travel_class` (
+  `travel_class_id` int(11) NOT NULL,
+  `class_name` varchar(45) NOT NULL,
+  `description` text,
+  PRIMARY KEY (`travel_class_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `travel_class`
+--
+
+LOCK TABLES `travel_class` WRITE;
+/*!40000 ALTER TABLE `travel_class` DISABLE KEYS */;
+INSERT INTO `travel_class` VALUES (1,'First Class',''),(2,'Business Class',''),(3,'Economy Class','');
+/*!40000 ALTER TABLE `travel_class` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2017-04-21 10:39:03
